@@ -1,0 +1,217 @@
+<?php
+    //Create all the tables
+    //---------------------------
+
+    //Table: users
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS users (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "fname VARCHAR(35) NOT NULL,";
+    $q .= "lname VARCHAR(35),";
+    $q .= "email VARCHAR(55),";
+    $q .= "password VARCHAR(100),";
+    $q .= "idnum VARCHAR(15),";                     //Roll number or Employ id
+    $q .= "residence VARCHAR(20),";
+    $q .= "room VARCHAR(10),";
+    $q .= "mob1 VARCHAR(10),";
+    $q .= "mob2 VARCHAR(10),";
+    $q .= "address VARCHAR(250),";
+    $q .= "dob DATE,";
+    $q .= "gender VARCHAR(7))";
+
+    $conn->query($q) or die("Create 'users' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: contacts
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS contacts (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "fname VARCHAR(35) NOT NULL,";
+    $q .= "lname VARCHAR(35),";
+    $q .= "mob VARCHAR(10))";
+
+    $conn->query($q) or die("Create 'contacts' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: user_roles
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS user_roles (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "role VARCHAR(10) NOT NULL)";
+    
+    $conn->query($q) or die("Create 'user_roles' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: relations
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS relations (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "relation VARCHAR(20) NOT NULL)";
+    
+    $conn->query($q) or die("Create 'relations' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: users_in_roles
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS users_in_roles (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "user_id INT NOT NULL,";
+    $q .= "role_id INT NOT NULL,";
+    $q .= "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (role_id) REFERENCES user_roles (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Create 'users_in_roles' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: users_in_relation
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS users_in_relation (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "user_id INT NOT NULL,";
+    $q .= "contact_id INT NOT NULL,";
+    $q .= "relation_id INT NOT NULL,";
+    $q .= "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (contact_id) REFERENCES contacts (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (relation_id) REFERENCES relations (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Create 'users_in_relation' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: medical_records
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS medical_records (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "doc_notes VARCHAR(250),";
+    $q .= "mrdate DATETIME,";
+    $q .= "doc_id INT NOT NULL,";
+    $q .= "user_id INT NOT NULL,";
+    $q .= "FOREIGN KEY (doc_id) REFERENCES users (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)";
+    
+    $conn->query($q) or die("Create 'medical_records' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: medicines
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS medicines (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "name VARCHAR(50),";
+    $q .= "manufacturer VARCHAR(30),";
+    $q .= "UNIQUE(name))";
+
+    $conn->query($q) or die("Create 'medicines' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: med_batch
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS med_batch (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "mfg_date DATE NOT NULL,";
+    $q .= "exp_date DATE NOT NULL,";
+    $q .= "arr_date DATE NOT NULL,";                //date on which the stock arrived at the HC
+    $q .= "stock_num INT NOT NULL,";
+    $q .= "med_id INT NOT NULL,";
+    $q .= "FOREIGN KEY (med_id) REFERENCES medicines (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Create 'med_batch' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: prescriptions
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS prescriptions (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "mr_id INT NOT NULL,";                        //medical record
+    $q .= "mb_id INT NOT NULL,";                        //medicine batch
+    $q .= "number INT,";
+    $q .= "af_food TINYINT,";
+    $q .= "fn TINYINT,";                                //forenoon
+    $q .= "an TINYINT,";                                //afternoon   
+    $q .= "nt TINYINT,";                                //night                      
+    $q .= "FOREIGN KEY (mr_id) REFERENCES medical_records (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (mb_id) REFERENCES med_batch (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Create 'prescriptions' Table failed. Contact admins. Error: " . $conn->error);
+
+    //Table: med_certificate
+    //---------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS med_certificate (";
+    $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "mr_id INT NOT NULL,"; 
+    $q .= "issue_date DATETIME NOT NULL,";
+    $q .= "start_date DATE NOT NULL,";
+    $q .= "duration TINYINT NOT NULL,";
+    $q .= "rec_ref VARCHAR(20),";                           //Receipt reference number
+    $q .= "FOREIGN KEY (mr_id) REFERENCES medical_records (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die(" Create 'med_certificate' Table failed. Contact admins. Error: " . $conn->error);
+
+
+    //Insert some required data
+    //============================
+
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 1, 'Admin') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Admin'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Admin creation failed (1.1). Contact admins. Error: " . $conn->error);
+
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 2, 'Doctor') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Doctor'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Admin creation failed (1.2). Contact admins. Error: " . $conn->error);
+
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 3, 'Nurse') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Nurse'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Admin creation failed (1.3). Contact admins. Error: " . $conn->error);
+
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 4, 'Employee') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Employee'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Admin creation failed (1.4). Contact admins. Error: " . $conn->error);
+
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 5, 'Students') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Students'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Admin creation failed (1.5). Contact admins. Error: " . $conn->error);
+
+    $default_admin_email = "admin";
+    $default_admin_password = "admin";
+
+    $query_check_admin_exists = "SELECT id FROM users WHERE email = ? LIMIT 1";
+    $statement_check_admin_exists = $conn->prepare($query_check_admin_exists);
+    $statement_check_admin_exists->bind_param('s', $default_admin_email);
+    $statement_check_admin_exists->execute();
+    $statement_check_admin_exists->store_result();
+    if($statement_check_admin_exists->num_rows == 0)
+    {
+        $query_insert_admin = "INSERT INTO users (fname, email, password) VALUES ('Admin', ?, SHA(?))";
+        $statement_insert_admin = $conn->prepare($query_insert_admin);
+        $statement_insert_admin->bind_param('ss', $default_admin_email, $default_admin_password);
+        $statement_insert_admin->execute();
+        $statement_insert_admin->store_result();
+
+        $admin_user_id = $statement_insert_admin->insert_id;
+        $query_add_admin_to_role = "INSERT INTO users_in_roles(user_id, role_id) VALUES (?, 1)";
+        $statement_add_admin_to_role = $conn->prepare($query_add_admin_to_role);
+        $statement_add_admin_to_role->bind_param('d', $admin_user_id);
+        $statement_add_admin_to_role->execute();
+        $statement_add_admin_to_role->close();
+    }
+?>
