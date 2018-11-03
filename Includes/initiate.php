@@ -6,10 +6,7 @@
 
     session_start();
 
-    $db_server = "localhost";
-    $db_user = "root";
-    $db_password = "roosafeed";
-    $db_name = "health_centre";
+    include_once("DBsettings.php");
 
     $conn = new mysqli($db_server, $db_user, $db_password, $db_name);
     if($conn->connect_error)
