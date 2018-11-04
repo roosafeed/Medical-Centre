@@ -285,3 +285,73 @@ div.mr-result h3, div.mr-result h4, div.mr-result p
 {
     margin: 2px 0;
 }
+
+
+/*
+*USER PAGE
+******************************************************************
+*/
+
+div#user-med-to-take, div#user-mr-history
+{
+    width: 90%;
+    position: inherit;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    background: rgba(31, 32, 34, 0.1);
+    border-radius: 5px;
+    margin: 20px 0 0 0;
+    padding: 0;
+    padding-bottom: 5px;
+}
+
+div#user-mr-history div.user-mr-result
+{
+    padding: 0px;
+    width: 98%;
+    position: inherit;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 1px solid #202124;
+    border-radius: 5px;
+    margin-bottom: 2px;
+}
+
+div#user-mr-history div.user-mr-result p
+{
+    margin: 10px;
+}
+
+div#user-med-to-take h3, div#user-mr-history h3
+{
+    background: rgba(31, 32, 34, 0.2);
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; 
+    margin: 0;
+    padding: 5px;
+}
+
+div#user-mr-history h3:first-child
+{
+    margin-bottom: 5px;
+}
+
+div#user-med-to-take ul li ul, div#user-mr-history ul li ul
+{
+    list-style-type: none;
+}
+
+div#user-med-to-take ul li ul li, div#user-mr-history ul li ul li
+{
+    display: inline-block;
+    background: #202124;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+div#user-med-to-take h4, div#user-mr-history h4
+{
+    margin: 20px 5px 5px 5px;
+}
