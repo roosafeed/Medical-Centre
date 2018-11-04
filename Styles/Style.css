@@ -30,6 +30,7 @@ div#modal
     overflow-y: auto;
     max-width: 80%;
     max-height: 90%;
+    box-shadow: 0px 5px 10px #202124;
 }
 
 div#modal h3#modal-close

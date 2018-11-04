@@ -198,7 +198,8 @@
         $num = $_POST["stock-num"];
 
         $name = explode("(", $med_name);
-        $med_name = trim($name[0]);
+        $name = explode(":", $name[0]);
+        $med_name = trim($name[1]);
 
         $mchck = "SELECT id FROM medicines WHERE id = ? AND LOWER(name) = LOWER(?)";
         $mchck = $conn->prepare($mchck);

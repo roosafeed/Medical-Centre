@@ -20,7 +20,7 @@ $("#modal-close").click(function () {
 
 function modalShow(data)
 {
-    $("#modal-body").val(data);
+    $("#modal-body").html(data);
     $("#modal").show(200);
     return true;
 }
