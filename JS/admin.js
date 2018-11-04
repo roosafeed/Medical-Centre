@@ -14,6 +14,17 @@ $(".admin-function-close").click(function () {
     $(".function").hide(500);
 });
 
+$("#modal-close").click(function () {
+    $("#modal").hide(200);
+});
+
+function modalShow(data)
+{
+    $("#modal-body").val(data);
+    $("#modal").show(200);
+    return true;
+}
+
 function reHTML(data){
     $("input").attr("disabled", "disabled");
     $("option").attr("disabled", "disabled");
@@ -26,9 +37,11 @@ function reHTML(data){
         url: '/admin_handle.php',
         dataType: 'HTML'
     }).done(function (data, status, xhr) {
-        alert(data);
+        //alert(data);
+        modalShow(data);
     }).fail(function (xhr, status, errorThrown) {
-        alert("Error: " + status + "\n" + errorThrown);
+        //alert("Error: " + status + "\n" + errorThrown);
+        modalShow("Error: " + status + "\n" + errorThrown);
     }).always(function () {
         $("input").removeAttr("disabled");
         $("option").removeAttr("disabled");
@@ -88,8 +101,12 @@ $(function () {
 
     $(".mr-meds-input").autocomplete({
         source: "/med_search.php",
-        minLength: 4
-    });
+        minLength: 3
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div>" + item.value + "<br>" + item.desc + "</div></li>" )
+        .appendTo( ul );
+    };
 
     $("#mr-user").autocomplete({
         source: function (request, response) {
@@ -114,6 +131,7 @@ $(function () {
     });
 
     $(".med-time").button();
+
 });
 
 function addMed() {
@@ -125,6 +143,7 @@ function addMed() {
     var med_input = document.createElement("input");
     med_input.type = "text";
     med_input.name = "mr-med" + (len + 1);
+    med_input.id = "mr-med" + (len + 1);
     med_input.className = "mr-meds-input";
     med_input.placeholder = "Medicine"  + (len + 1);
     container.appendChild(med_input);
@@ -198,9 +217,14 @@ function addMed() {
     container.appendChild(br);
 
     $(".med-time").button();
-    $(".mr-meds-input").autocomplete({
+
+    $("#mr-med" + (len + 1)).autocomplete({
         source: "/med_search.php",
-        minLength: 2
-    });
+        minLength: 3
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div>" + item.value + "<br>" + item.desc + "</div></li>" )
+        .appendTo( ul );
+    };
 }
 

@@ -19,6 +19,12 @@
     <body>
 
         <div id="loading"></div>
+        <div id="modal">
+            <h3 id="modal-close">X</h3>
+            <div id="modal-body">
+                Modal
+            </div>
+        </div>
         <?php
             if(isloggedin())
             {

@@ -250,35 +250,42 @@
         if($ar == 1)
         {
             $numb = 0; $af_f = 0; $fn = 0; $an = 0; $nt = 0; $intn = 0; $med_name = "";
-
             $q2 = "INSERT INTO prescriptions (mr_id, mb_id, number, af_food, fn, an, nt) ";
-            $q2 .= "SELECT ?, MB.id, ?, ?, ?, ?, ? FROM med_batch MB INNER JOIN medicines M ON M.id = MB.med_id ";
-            $q2 .= "WHERE M.name = ? AND DATE(CURDATE()) < DATE_SUB(DATE(MB.exp_date), INTERVAL ? DAY) ";
-            $q2 .= "AND MB.stock_num > ? ORDER BY MB.arr_date LIMIT 1";
+            $q2 .= "VALUES (?, ?, ?, ?, ?, ?, ?)";            
             $q2 = $conn->prepare($q2) or die($conn->error);
-            $q2->bind_param("diiiiisii", $id, $numb, $af_f, $fn, $an, $nt, $med_name, $intn, $numb) or die($q->error);
+            $q2->bind_param("ddiiiii", $id, $mb_id, $numb, $af_f, $fn, $an, $nt) or die($q->error);
             
+            $q3 = "UPDATE med_batch SET stock_num = (stock_num - ?) WHERE id = ?";
+            $q3 = $conn->prepare($q3) or die($conn->error);
+            $q3->bind_param("id", $numb, $mb_id);
 
             $n = 1;
             while(isset($_POST["mr-med" . $n]))
             {
-                $intn = 0;
-                $med_name = $_POST["mr-med" . $n];
+                $name = explode(":", trim($_POST["mr-med" . $n]));
+                $mb_id = $name[0];
                 $numb = $_POST["mr-med-num" . $n];
                 $af_f = (isset($_POST["mr-af" . $n]))? 1 : 0;
                 $fn = (isset($_POST["mr-fn" . $n]))? 1 : 0;
                 $an = (isset($_POST["mr-an" . $n]))? 1 : 0;
                 $nt = (isset($_POST["mr-nt" . $n]))? 1 : 0;
-                $intn = $numb / ($fn + $an + $nt);
-                $intn = ceil($intn);
 
-                $q2->execute() or die($q2->error);
+                if($q2->execute())
+                {
+                    $q3->execute() or die($q3->error);
+                }
+                else
+                {
+                    die($q2->error);
+                }
                 $n = $n + 1;
             }
             $r = $q2->store_result();
             
             if($q2->affected_rows > 0)
             {
+                
+                
                 echo "Successfully Added";
             }
             else
@@ -293,4 +300,6 @@
             echo "Unknown Error";
         }
     }
+
+
 ?>

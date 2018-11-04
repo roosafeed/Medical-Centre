@@ -15,6 +15,9 @@
     <div class="button" id="toggle-add-mr">
         <h2>Add Medical Record</h2>
     </div>
+    <div class="button" id="toggle-del-last-record">
+        <h2>Delete Last Record</h2>
+    </div>
     <div class="button" id="toggle-add-med-stock">
         <h2>Add Medicine Stock</h2>
     </div>
@@ -154,6 +157,18 @@
             <h3>Add a new Relation</h3>
             <input type="text" name="rel-name" id="rel-name" placeholder="Enter a new realtionship" title="Enter a new relationship">
             <input type="submit" name="rel-sub" value="Add Relation" />
+            <input type="reset" value="Clear" />
+        </form>
+    </div>
+
+    <div class="function" id="del-last-record">
+        <form id="del-last-record-form" method="post" action="">
+            <h3 class="admin-function-close">X</h3>
+            <h3>Delete Last Medical Record</h3>
+            <p>You can only delete the latest medical record</p>
+            <label for="del-idnum">Confirm last record's user:</label>
+            <input type="text" name="del-idnum" id="del-idnum" placeholder="Rollnumber/ Employee ID or Email" title="Rollnumber/ Employee ID or Email">
+            <br /><input type="submit" name="del-sub" value="Delete Record" />
             <input type="reset" value="Clear" />
         </form>
     </div>

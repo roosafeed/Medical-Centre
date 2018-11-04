@@ -2,7 +2,8 @@
     include_once("Includes/initiate.php");
 
     $med = "%". trim($_GET["term"]) ."%";
-    $query = "SELECT * FROM medicines WHERE name LIKE ? ORDER BY name ASC";
+    $query = "SELECT MB.id AS id, M.name AS name, M.manufacturer AS man, MB.arr_date AS arr, MB.exp_date AS exp, MB.stock_num AS num FROM medicines M ";
+    $query .= "INNER JOIN med_batch MB ON M.id = MB.med_id WHERE M.name LIKE ? AND DATE(CURDATE()) < DATE(MB.exp_date) ORDER BY MB.arr_date ASC";
     $query = $conn->prepare($query);
     $query->bind_param("s", $med);
     $query->execute();
@@ -12,7 +13,8 @@
     while($row = $result->fetch_assoc())
     {
         $data["id"] = $row["id"];
-        $data["value"] = $row["name"] . " (" . $row["manufacturer"] . ")";
+        $data["value"] = $row["id"] . ":" . $row["name"] . " (" . $row["man"] . ")";
+        $data["desc"] = "Available:" . $row["num"] . "| Exp:" . $row["exp"] . "| Arrived:" . $row["arr"];
         $dataArray[] = $data;
     }
 
