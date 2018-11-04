@@ -67,7 +67,16 @@ $("#create-user-form").submit(function (e) {
 
 });
 
-$("#add-med-form, #add-relation-form, #add-med-stock-form, #add-mr-form").submit(function (e) {
+$("#del-last-record-form").submit(function (e) {
+    var data = $(this).serialize();
+    e.preventDefault();
+    var con = confirm("Are you sure that you want to delete the last record of this user?\n" + $("#del-idnum").val());
+    if (con) {
+        reHTML(data);
+    }
+});
+
+$("#add-med-form, #add-relation-form, #add-med-stock-form, #add-mr-form, #get-user-history-form").submit(function (e) {
     var data = $(this).serialize();
     e.preventDefault();
 
@@ -99,13 +108,23 @@ $(function () {
         }
     });
 
+    $("#history-username").autocomplete({
+        source: function (request, response) {
+            $.getJSON("/user_search.php", { term: request.term, role: 'user' },
+              response);
+        },
+        select: function (event, ui) {
+            $("#history-user-id").val(ui.item.id);
+        }
+    });
+
     $(".mr-meds-input").autocomplete({
         source: "/med_search.php",
         minLength: 3
-    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append( "<div>" + item.value + "<br>" + item.desc + "</div></li>" )
-        .appendTo( ul );
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        return $("<li>")
+        .append("<div>" + item.value + "<br>" + item.desc + "</div></li>")
+        .appendTo(ul);
     };
 
     $("#mr-user").autocomplete({

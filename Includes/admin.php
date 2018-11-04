@@ -142,10 +142,11 @@
     </div>
 
     <div class="function" id="get-user-history">
-        <form>
+        <form id="get-user-history-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
             <h3>Reset User's Medical History</h3>
             <input type="text" name="history-username" id="history-username" placeholder="Email or Rollnumber/ Employee id" title="Email or Rollnumber/ Employee id">
+            <input type="hidden" name="history-user-id" id="history-user-id" value="" />
             <input type="submit" name="history-sub" value="Get History" />
             <input type="reset" value="Clear" />
         </form>

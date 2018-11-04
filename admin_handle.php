@@ -302,5 +302,102 @@
         }
     }
 
+    elseif(isset($_POST["del-idnum"]))
+    {
+        $idnum = trim($_POST["del-idnum"]);
+        $query = "SELECT MR.id AS id, U.fname, U.lname, UPPER(U.idnum) AS idnum, UPPER(U.email) AS email FROM users U INNER JOIN medical_records MR ON MR.user_id = U.id WHERE ";
+        $query .= "DATE(CURDATE()) = DATE(MR.mrdate) ORDER BY MR.mrdate DESC LIMIT 1"; 
+        $query = $conn->query($query);
 
+        if($query->num_rows == 1)
+        {
+            $row = $query->fetch_assoc();
+            $query->close();
+            if(strtoupper($idnum) == $row["idnum"] || strtoupper($idnum) == $row["email"])
+            {
+                $query = "DELETE FROM medical_records WHERE id = ?";
+                $query = $conn->prepare($query);
+                $query->bind_param("d", $row["id"]);
+                $query->execute();
+                $query->store_result();
+                if($query->affected_rows == 1)
+                {
+                    echo "Successfully deleted the last medical record of " . $row["fname"] . " " . $row["lname"] . " (" . $row["idnum"] . ")";
+                }
+                else
+                {
+                    echo "Error";
+                }
+            }
+            else
+            {
+                echo "The last medical record does not belong to " . strtoupper($idnum);
+            }
+        }
+        else
+        {
+            echo "No medical records were created today. You can only delete the last medical record of the day.";
+        }
+    }
+
+    elseif(isset($_POST["history-user-id"]))
+    {
+        $uname = trim($_POST["history-username"]);
+        $name = explode("(", $uname);
+        $uname = trim($name[0]);
+        $uid = trim($_POST["history-user-id"]);
+        $uname = explode(" ", $uname);
+        $fname = trim($uname[0]);
+        $lname = trim($uname[1]);
+
+        $qcheck = "SELECT id FROM users WHERE id = ? AND UPPER(lname) = UPPER(?) AND UPPER(fname) = UPPER(?)";
+        $qcheck = $conn->prepare($qcheck);
+        $qcheck->bind_param("dss", $uid, $lname, $fname);
+        $qcheck->execute();
+        $qcheck->store_result();
+        if($qcheck->num_rows == 1)
+        {
+            $qmr = "SELECT U.idnum AS doc_idnum, U.fname AS doc_fname, U.lname AS doc_lname, MR.*, DATE_FORMAT(MR.mrdate, '%a, %e %b %Y | %r') AS date";
+            $qmr .= " FROM medical_records MR INNER JOIN users U ON MR.doc_id = U.id INNER JOIN users U2 ON U2.id = MR.user_id WHERE U2.id = ?";
+            $qmr = $conn->prepare($qmr) or die($conn->error);
+            $qmr->bind_param("d", $uid) or die($qmr->error);
+            $qmr->execute() or die($qmr->error);
+            $mr_res = $qmr->get_result() or die($qmr->error);
+
+                $qmed = "SELECT P.*, M.name, M.manufacturer FROM prescriptions P INNER JOIN med_batch MB ON MB.id = P.mb_id ";
+                $qmed .= "INNER JOIN medicines M ON M.id = MB.med_id WHERE P.mr_id = ?";
+                $qmed = $conn->prepare($qmed) or die($conn->error);
+                $qmed->bind_param("d", $mr_id) or die($qmed->error);
+
+                if($mr_res->num_rows == 0)
+                {
+                    echo "No records found";
+                }
+
+                while($mr_row = $mr_res->fetch_assoc())
+                {
+                    $mr_id = $mr_row["id"];
+                    $qmed->execute() or die($qmed->error);
+                    $med_res = $qmed->get_result() or die($qmed->error);
+
+                    echo '<div class="mr-result">';
+                    echo '<h3>'.$mr_row["date"].'</h3><h4>Dr. '.$mr_row["doc_fname"].' '.$mr_row["doc_lname"].' ('.$mr_row["doc_idnum"].')</h4>';
+                    echo '<p>'.$mr_row["doc_notes"].'</p><ul id="meds">';
+                    while($row = $med_res->fetch_assoc())
+                    {
+                        echo '<li><div><h4>'.$row["name"].' ('.$row["manufacturer"].')</h4>';
+                        echo ($row["af_food"] == 1)? ' <p>After Food</p> ': ' <p>Before Food</p> ';
+                        echo ($row["fn"] == 1)? ' <p>Morning</p> ': '';
+                        echo ($row["an"] == 1)? ' <p>Afternoon</p> ': '';
+                        echo ($row["nt"] == 1)? ' <p>Night</p> ': '';
+                        echo '</div></li>';
+                    } 
+                    echo '</ul></div>';      //.mr
+                }
+        }
+        else
+        {
+            echo "Error: ID and Name mismatch";
+        }
+    }
 ?>

@@ -6,7 +6,6 @@
 
 *
 {
-    transition: all 0.5s;
     font-family: Verdana;
 }
 
@@ -45,6 +44,11 @@ div#modal h3#modal-close
     cursor: pointer;
     margin: 1px;
 }
+    div#modal h3#modal-close:hover 
+    {
+        background: #202124;
+        color: #fff;
+    }
 
 div#modal div#modal-body
 {
@@ -266,4 +270,18 @@ input[type=submit]
 input.input-small
 {
     width: 100px;
+}
+
+div.mr-result
+{
+    border-radius: 5px;
+    padding: 2px 10px;
+    background: rgba(31, 32, 34, 0.1);
+    width: 90%;
+    margin: 5px;
+}
+
+div.mr-result h3, div.mr-result h4, div.mr-result p
+{
+    margin: 2px 0;
 }

@@ -8,7 +8,7 @@
 
     if($role == "user")
     {
-        $query = "SELECT id, fname, lname, idnum FROM users WHERE idnum LIKE ? OR email LIKE ?";
+        $query = "SELECT id, fname, lname, idnum FROM users WHERE idnum LIKE ? OR email LIKE ? LIMIT 6";
         $query = $conn->prepare($query);
         $query->bind_param("ss", $term, $term);
     }
