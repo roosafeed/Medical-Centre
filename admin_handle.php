@@ -1,6 +1,11 @@
 <?php
     include_once("Includes/initiate.php");
 
+    if(!(isAdmin() || isHCstaff()))
+    {
+        header("Location: index.php");
+    }
+
     if(isset($_POST["new-email"]))
     {
         $email = trim($_POST["new-email"]);

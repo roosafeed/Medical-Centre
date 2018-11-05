@@ -13,7 +13,7 @@
         <link href="/Styles/Style.css" rel="stylesheet" type="text/css" />
         <script src="/JS/jquery3.3.1min.js"></script>
         <link href="/JS/autocomplete/jquery-ui.css" rel="stylesheet" type="text/css" />
-        <script src="JS/autocomplete/jquery-ui.min.js"></script>
+        <script src="/JS/autocomplete/jquery-ui.min.js"></script>
         
     </head>
     <body>

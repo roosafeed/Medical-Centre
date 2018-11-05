@@ -14,42 +14,6 @@ $(".admin-function-close").click(function () {
     $(".function").hide(500);
 });
 
-$("#modal-close").click(function () {
-    $("#modal").hide(200);
-});
-
-function modalShow(data)
-{
-    $("#modal-body").html(data);
-    $("#modal").show(200);
-    return true;
-}
-
-function reHTML(data){
-    $("input").attr("disabled", "disabled");
-    $("option").attr("disabled", "disabled");
-    $("textarea").attr("disabled", "disabled");
-    $("#loading").show();
-
-    $.ajax({
-        method: 'POST',
-        data: data,
-        url: '/admin_handle.php',
-        dataType: 'HTML'
-    }).done(function (data, status, xhr) {
-        //alert(data);
-        modalShow(data);
-    }).fail(function (xhr, status, errorThrown) {
-        //alert("Error: " + status + "\n" + errorThrown);
-        modalShow("Error: " + status + "\n" + errorThrown);
-    }).always(function () {
-        $("input").removeAttr("disabled");
-        $("option").removeAttr("disabled");
-        $("textarea").removeAttr("disabled");
-        $("#loading").hide();
-    });
-}
-
 $("#create-user-form").submit(function (e) {
     //Submit the Create New User form
     //-------------------------------------------
@@ -62,7 +26,7 @@ $("#create-user-form").submit(function (e) {
     }
 
     if (con) {
-        reHTML(data);
+        reHTML(data, '/admin_handle.php');
     }
 
 });
@@ -72,7 +36,7 @@ $("#del-last-record-form").submit(function (e) {
     e.preventDefault();
     var con = confirm("Are you sure that you want to delete the last record of this user?\n" + $("#del-idnum").val());
     if (con) {
-        reHTML(data);
+        reHTML(data, '/admin_handle.php');
     }
 });
 
@@ -80,7 +44,7 @@ $("#add-med-form, #add-relation-form, #add-med-stock-form, #add-mr-form, #get-us
     var data = $(this).serialize();
     e.preventDefault();
 
-    reHTML(data);
+    reHTML(data, '/admin_handle.php');
 });
 
 $("#reset-user-pass-form").submit(function (e) {
@@ -90,7 +54,7 @@ $("#reset-user-pass-form").submit(function (e) {
     var con = confirm("Are you sure you want to reset their password?\n" + $("#reset-username").val());
 
     if (con) {
-        reHTML(data);
+        reHTML(data, '/admin_handle.php');
     }
 });
 
