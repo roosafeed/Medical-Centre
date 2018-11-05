@@ -105,9 +105,9 @@
         $mob2 = trim($_POST["mob2"]);
         $address = trim($_POST["address"]);
 
-        $qubio = "UPDATE users SET fname = ?, lname = ?, residence = ?, room = ?, mob1 = ?, mob2 = ?, address = ?";
+        $qubio = "UPDATE users SET fname = ?, lname = ?, residence = ?, room = ?, mob1 = ?, mob2 = ?, address = ? WHERE id = ?";
         $qubio = $conn->prepare($qubio);
-        $qubio->bind_param("sssssss", $fname, $lname, $res, $room, $mob1, $mob2, $address);
+        $qubio->bind_param("sssssssd", $fname, $lname, $res, $room, $mob1, $mob2, $address, $_SESSION["userid"]);
         $qubio->execute();
         $qubio->store_result();
         if($qubio->affected_rows > 0)
