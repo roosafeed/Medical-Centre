@@ -33,6 +33,12 @@
     <div class="button" id="toggle-add-relation">
         <h2>Add New Relation</h2>
     </div>
+    <div class="button" id="toggle-get-contact">
+        <h2>Get User Contacts</h2>
+    </div>
+    <div class="button" id="toggle-get-user-details">
+        <h2>Get User Details</h2>
+    </div>
     
 </div>
 
@@ -144,7 +150,7 @@
     <div class="function" id="get-user-history">
         <form id="get-user-history-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
-            <h3>Reset User's Medical History</h3>
+            <h3>Get User's Medical History</h3>
             <input type="text" name="history-username" id="history-username" placeholder="Email or Rollnumber/ Employee id" title="Email or Rollnumber/ Employee id">
             <input type="hidden" name="history-user-id" id="history-user-id" value="" />
             <input type="submit" name="history-sub" value="Get History" />
@@ -168,10 +174,32 @@
             <h3>Delete Last Medical Record</h3>
             <p>You can only delete the latest medical record</p>
             <label for="del-idnum">Confirm last record's user:</label>
-            <input type="text" name="del-idnum" id="del-idnum" placeholder="Rollnumber/ Employee ID or Email" title="Rollnumber/ Employee ID or Email">
+            <input type="text" name="del-idnum" id="del-idnum" placeholder="Rollnumber/ Employee ID or Email" title="Rollnumber/ Employee ID or Email" />
             <br /><input type="submit" name="del-sub" value="Delete Record" />
             <input type="reset" value="Clear" />
         </form>
+    </div>
+
+    <div id="get-contact" class="function">
+        <form id="get-contact-form" method="post" action="">
+            <h3 class="admin-function-close">X</h3>
+            <h3>Get User Emergency Contacts</h3>
+            <input type="text" name="cont-username" id="cont-username" placeholder="Rollnumber/ Employee ID or Email" title="Rollnumber/ Employee ID or Email" />
+            <input type="hidden" name="cont-user-id" id="cont-user-id" />
+            <br /><input type="submit" value="Get Contacts" name="cont-sub" />
+            <input type="reset" value="Reset" />
+         </form>
+    </div>
+
+    <div id="get-user-details" class="function">
+        <form id="get-user-details-form" method="post" action="">
+            <h3 class="admin-function-close">X</h3>
+            <h3>Get User Details</h3>
+            <input type="text" name="det-username" id="det-username" placeholder="Rollnumber/ Employee ID or Email" title="Rollnumber/ Employee ID or Email" />
+            <input type="hidden" name="det-user-id" id="det-user-id" />
+            <br /><input type="submit" value="Get Details" name="det-sub" />
+            <input type="reset" value="Reset" />
+         </form>
     </div>
 </div>
 

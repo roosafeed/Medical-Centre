@@ -286,6 +286,22 @@ div.mr-result h3, div.mr-result h4, div.mr-result p
     margin: 2px 0;
 }
 
+div#det-result
+{
+    padding: 10px;
+    word-wrap: initial;
+}
+
+div#det-result h4, div#det-result h3, div#cont-result h3, div#cont-result h4, div#cont-result p
+{
+    margin: 5px;    
+}
+
+div#cont-result h3
+{
+    margin-top: 15px;
+}
+
 
 /*
 *USER PAGE

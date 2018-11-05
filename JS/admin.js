@@ -40,7 +40,7 @@ $("#del-last-record-form").submit(function (e) {
     }
 });
 
-$("#add-med-form, #add-relation-form, #add-med-stock-form, #add-mr-form, #get-user-history-form").submit(function (e) {
+$("#add-med-form, #add-relation-form, #add-med-stock-form, #add-mr-form, #get-user-history-form, #get-user-details-form, #get-contact-form").submit(function (e) {
     var data = $(this).serialize();
     e.preventDefault();
 
@@ -112,6 +112,29 @@ $(function () {
             $("#mr-dr-id").val(ui.item.id);
         }
     });
+
+    $("#det-username").autocomplete({
+        source: function (request, response) {
+            $.getJSON("/user_search.php", { term: request.term, role: 'user' },
+              response);
+        },
+        minLength: 4,
+        select: function (event, ui) {
+            $("#det-user-id").val(ui.item.id);
+        }
+    });
+
+    $("#cont-username").autocomplete({
+        source: function (request, response) {
+            $.getJSON("/user_search.php", { term: request.term, role: 'user' },
+              response);
+        },
+        minLength: 4,
+        select: function (event, ui) {
+            $("#cont-user-id").val(ui.item.id);
+        }
+    });
+
 
     $(".med-time").button();
 

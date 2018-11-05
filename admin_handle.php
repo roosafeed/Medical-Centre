@@ -405,4 +405,65 @@
             echo "Error: ID and Name mismatch";
         }
     }
+
+    elseif(isset($_POST["det-user-id"]))
+    {
+        $uid = trim($_POST["det-user-id"]);
+
+        $qudet = "SELECT (YEAR(CURDATE()) - YEAR(U.dob)) AS age, UPPER(U.idnum) AS idn, UPPER(U.residence) AS res, U.*, R.role FROM users U INNER JOIN users_in_roles UR ON UR.user_id = U.id INNER JOIN user_roles R ON R.id = UR.role_id";
+        $qudet .= " WHERE U.id = ?";
+        $qudet = $conn->prepare($qudet);
+        $qudet->bind_param("d", $uid);
+        $qudet->execute();
+        $det_res = $qudet->get_result();
+        $qudet->close();
+        if($det_res->num_rows == 0)
+        {
+            echo "Error fetching details";
+        }
+        else
+        {
+            $r = $det_res->fetch_assoc();
+            echo '<div id="det-result">';
+            echo '<p>' . $r["role"] . '</p>';
+            echo '<h3>' . $r["idn"] . '</h3>';
+            echo '<h3>' . $r["fname"] . ' ' .  $r["lname"] . '</h3>';
+            echo 'Email: <h3>' . $r["email"] . '</h3>';
+            echo 'Stays in: <h4>' . $r["res"] . ', # ' . $r["room"] . '</h4>';
+            echo 'Mobile 1: <h4>' . $r["mob1"] .'</h4>';
+            echo 'Mobile 2: <h4>' . $r["mob2"] .'</h4>';
+            echo 'Address: <h4>' . $r["address"] .'</h4>';
+            echo 'DOB: <h4>' . $r["dob"] . ' (' . $r["age"] .' years)</h4>';
+            echo '<h4>' . $r["gender"] .'</h4>';
+            echo '</div>';      //#det-result
+        }
+    }
+
+    elseif(isset($_POST["cont-user-id"]))
+    {
+        $uid = trim($_POST["cont-user-id"]);
+
+        $qucont = "SELECT C.*, R.relation FROM contacts C INNER JOIN users_in_relation UR ON UR.contact_id = C.id INNER JOIN relations R ";
+        $qucont .= "ON R.id = UR.relation_id WHERE UR.user_id = ?";
+        $qucont = $conn->prepare($qucont);
+        $qucont->bind_param("d", $uid);
+        $qucont->execute();
+        $cont_res = $qucont->get_result();
+        $qucont->close();
+        if($cont_res->num_rows == 0)
+        {
+            echo "No records found";
+        }
+        else
+        {
+            echo '<div id="cont-result"><ul>';
+            while($r = $cont_res->fetch_assoc())
+            {                
+                echo '<li><h3>' . $r["fname"] . ' ' . $r["lname"] . '</h3>';
+                echo '<p>' . $r["relation"] . '</p>';
+                echo '<h4>' . $r["mob"] . '</h4></li>';                 
+            }
+            echo '</ul></div>';          //#cont-result            
+        }
+    }
 ?>

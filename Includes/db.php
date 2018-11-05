@@ -165,7 +165,7 @@
     $q .= "SELECT role FROM user_roles WHERE role = 'Doctor'";
     $q .= ") LIMIT 1";
    
-    $conn->query($q) or die("Admin creation failed (1.2). Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Doctor creation failed (1.2). Contact admins. Error: " . $conn->error);
 
     $q = "INSERT INTO user_roles (id, role) ";
     $q .= "SELECT * FROM (SELECT 3, 'Nurse') AS tmp ";
@@ -173,7 +173,7 @@
     $q .= "SELECT role FROM user_roles WHERE role = 'Nurse'";
     $q .= ") LIMIT 1";
    
-    $conn->query($q) or die("Admin creation failed (1.3). Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Nurse creation failed (1.3). Contact admins. Error: " . $conn->error);
 
     $q = "INSERT INTO user_roles (id, role) ";
     $q .= "SELECT * FROM (SELECT 4, 'Employee') AS tmp ";
@@ -181,15 +181,15 @@
     $q .= "SELECT role FROM user_roles WHERE role = 'Employee'";
     $q .= ") LIMIT 1";
    
-    $conn->query($q) or die("Admin creation failed (1.4). Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Employee creation failed (1.4). Contact admins. Error: " . $conn->error);
 
     $q = "INSERT INTO user_roles (id, role) ";
-    $q .= "SELECT * FROM (SELECT 5, 'Students') AS tmp ";
+    $q .= "SELECT * FROM (SELECT 5, 'Student') AS tmp ";
     $q .= "WHERE NOT EXISTS (";
-    $q .= "SELECT role FROM user_roles WHERE role = 'Students'";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Student'";
     $q .= ") LIMIT 1";
    
-    $conn->query($q) or die("Admin creation failed (1.5). Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Student creation failed (1.5). Contact admins. Error: " . $conn->error);
 
     $default_admin_email = "admin";
     $default_admin_password = "admin";
