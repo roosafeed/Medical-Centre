@@ -49,12 +49,12 @@
         }
     }
 
-    function isHCstaff()
+    function isNurse()
     {
         if(isloggedin())
         {
             global $conn;
-            $q = "SELECT role FROM user_roles R INNER JOIN users_in_roles UR ON R.id = UR.role_id INNER JOIN users U ON U.id = UR.user_id WHERE U.id = ? AND (R.id = 2 OR R.id = 3)";
+            $q = "SELECT role FROM user_roles R INNER JOIN users_in_roles UR ON R.id = UR.role_id INNER JOIN users U ON U.id = UR.user_id WHERE U.id = ? AND R.id = 3";
             $queryRole = $conn->prepare($q);
             $queryRole->bind_param("d", $_SESSION["userid"]);
             $queryRole->execute();
@@ -75,5 +75,38 @@
         {
             return FALSE;
         }
+    }
+
+    function isDoc()
+    {
+        if(isloggedin())
+        {
+            global $conn;
+            $q = "SELECT role FROM user_roles R INNER JOIN users_in_roles UR ON R.id = UR.role_id INNER JOIN users U ON U.id = UR.user_id WHERE U.id = ? AND R.id = 2";
+            $queryRole = $conn->prepare($q);
+            $queryRole->bind_param("d", $_SESSION["userid"]);
+            $queryRole->execute();
+            $queryRole->store_result();
+            if($queryRole->num_rows == 1)
+            {
+                $queryRole->close();
+                return TRUE;
+            }
+            else
+            {
+                $queryRole->close();
+                return FALSE;
+            }
+        }
+
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    function isHCstaff()
+    {
+        return isNurse() || isDoc();   
     }
 ?>
