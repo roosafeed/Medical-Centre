@@ -8,6 +8,7 @@
 
     if(isset($_POST["new-email"]))
     {
+        //Create new user
         $email = trim($_POST["new-email"]);
         $role = $_POST["new-role"];
         $fname = trim($_POST["new-fname"]);
@@ -84,6 +85,7 @@
 
     elseif(isset($_POST["med-name"]))
     {
+        //Add new medicine
         $med_name = trim($_POST["med-name"]);
         $med_man = trim($_POST["med-manufacturer"]);
 
@@ -120,6 +122,7 @@
 
     elseif(isset($_POST["rel-name"]))
     {
+        //Add new relation
         $rel = trim($_POST["rel-name"]);
 
         $qrchk = "SELECT relation FROM relations WHERE LOWER(relation) = LOWER(?)";
@@ -157,6 +160,7 @@
 
     elseif(isset($_POST["reset-username"]))
     {
+        //Reset password
         $uname = trim($_POST["reset-username"]);
         $quchck = "SELECT idnum FROM users WHERE LOWER(email) = LOWER(?) OR LOWER(idnum) = LOWER(?)";
         $quchck = $conn->prepare($quchck);
@@ -195,6 +199,7 @@
 
     elseif(isset($_POST["stock-med-id"]))
     {
+        //Add medicine stock
         $med_id = trim($_POST["stock-med-id"]);
         $med_name = trim($_POST["stock-name"]);
         $mfg = $_POST["stock-mfg"];
@@ -234,12 +239,13 @@
         }
         else
         {
-            echo "Medicine does not exits";
+            echo "Medicine does not exist";
         }
     }
 
     elseif(isset($_POST["mr-user"]))
     {
+        //Add medical record
         $uid = $_POST["mr-user-id"];
         $did = $_POST["mr-dr-id"];
         $notes = trim($_POST["mr-notes"]);
@@ -309,6 +315,7 @@
 
     elseif(isset($_POST["del-idnum"]))
     {
+        //Delete last medical record of the day
         $idnum = trim($_POST["del-idnum"]);
         $query = "SELECT MR.id AS id, U.fname, U.lname, UPPER(U.idnum) AS idnum, UPPER(U.email) AS email FROM users U INNER JOIN medical_records MR ON MR.user_id = U.id WHERE ";
         $query .= "DATE(CURDATE()) = DATE(MR.mrdate) ORDER BY MR.mrdate DESC LIMIT 1"; 
@@ -347,6 +354,7 @@
 
     elseif(isset($_POST["history-user-id"]))
     {
+        //get user medical history
         $uname = trim($_POST["history-username"]);
         $name = explode("(", $uname);
         $uname = trim($name[0]);
@@ -355,9 +363,9 @@
         $fname = trim($uname[0]);
         $lname = trim($uname[1]);
 
-        $qcheck = "SELECT id FROM users WHERE id = ? AND UPPER(lname) = UPPER(?) AND UPPER(fname) = UPPER(?)";
+        $qcheck = "SELECT id FROM users WHERE id = ?";
         $qcheck = $conn->prepare($qcheck);
-        $qcheck->bind_param("dss", $uid, $lname, $fname);
+        $qcheck->bind_param("d", $uid);
         $qcheck->execute();
         $qcheck->store_result();
         if($qcheck->num_rows == 1)
@@ -408,6 +416,7 @@
 
     elseif(isset($_POST["det-user-id"]))
     {
+        //Get user details
         $uid = trim($_POST["det-user-id"]);
 
         $qudet = "SELECT (YEAR(CURDATE()) - YEAR(U.dob)) AS age, UPPER(U.idnum) AS idn, UPPER(U.residence) AS res, U.*, R.role FROM users U INNER JOIN users_in_roles UR ON UR.user_id = U.id INNER JOIN user_roles R ON R.id = UR.role_id";
@@ -441,6 +450,7 @@
 
     elseif(isset($_POST["cont-user-id"]))
     {
+        //Get user contact details
         $uid = trim($_POST["cont-user-id"]);
 
         $qucont = "SELECT C.*, R.relation FROM contacts C INNER JOIN users_in_relation UR ON UR.contact_id = C.id INNER JOIN relations R ";

@@ -1,0 +1,5 @@
+[05-Nov-2018 12:05:28 Asia/Kolkata] PHP Notice:  Trying to get property of non-object in F:\STUDIES\DBMS\Project\WebApp\admin_handle.php on line 420
+[05-Nov-2018 12:38:29 Asia/Kolkata] PHP Fatal error:  Call to a member function bind_param() on a non-object in F:\STUDIES\DBMS\Project\WebApp\admin_handle.php on line 449
+[05-Nov-2018 12:38:48 Asia/Kolkata] PHP Fatal error:  Call to a member function bind_param() on a non-object in F:\STUDIES\DBMS\Project\WebApp\admin_handle.php on line 449
+[05-Nov-2018 12:40:55 Asia/Kolkata] PHP Notice:  Trying to get property of non-object in F:\STUDIES\DBMS\Project\WebApp\admin_handle.php on line 453
+-

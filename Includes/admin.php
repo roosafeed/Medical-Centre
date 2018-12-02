@@ -141,7 +141,7 @@
         <form id="reset-user-pass-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
             <h3>Reset User Password</h3>
-            <input type="text" name="reset-username" id="reset-username" placeholder="Email or Rollnumber/ Employee id" title="Email or Rollnumber/ Employee id">
+            <input type="text" name="reset-username" id="reset-username" placeholder="Email or Rollnumber/ Employee id" title="Email or Rollnumber/ Employee id">            
             <input type="submit" name="reset-sub" value="Reset Password" />
             <input type="reset" value="Clear" />
         </form>
@@ -162,7 +162,7 @@
         <form id="add-relation-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
             <h3>Add a new Relation</h3>
-            <input type="text" name="rel-name" id="rel-name" placeholder="Enter a new realtionship" title="Enter a new relationship">
+            <input type="text" name="rel-name" id="rel-name" placeholder="Enter a new relationship" title="Enter a new relationship">
             <input type="submit" name="rel-sub" value="Add Relation" />
             <input type="reset" value="Clear" />
         </form>

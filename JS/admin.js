@@ -65,12 +65,19 @@ $("#add-relation #role-name").on('change', function () {
 
 $(function () {
     $("#stock-name").autocomplete({
-        source: "/med_search.php",
+        source: function (request, response) {
+            $.getJSON("/med_search.php", { term: request.term, type: 'new-med' },
+              response);
+        },
         minLength: 2,
         select: function (event, ui) {
             $("#stock-med-id").val(ui.item.id);
         }
-    });
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        return $("<li>")
+        .append("<div>" + item.value + "<br>" + item.desc + "</div></li>")
+        .appendTo(ul);
+    };
 
     $("#history-username").autocomplete({
         source: function (request, response) {
@@ -83,7 +90,10 @@ $(function () {
     });
 
     $(".mr-meds-input").autocomplete({
-        source: "/med_search.php",
+        source: function (request, response) {
+            $.getJSON("/med_search.php", { term: request.term, type: 'stock-med' },
+              response);
+        },
         minLength: 3
     }).data("ui-autocomplete")._renderItem = function (ul, item) {
         return $("<li>")

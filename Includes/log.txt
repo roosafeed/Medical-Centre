@@ -1,2 +1,3 @@
 [30-Oct-2018 15:12:59 Asia/Kolkata] PHP Notice:  Undefined index: page in F:\STUDIES\DBMS\Project\WebApp\Includes\header.php on line 86
 [30-Oct-2018 15:14:00 Asia/Kolkata] PHP Notice:  Undefined index: page in F:\STUDIES\DBMS\Project\WebApp\Includes\header.php on line 86
+[06-Nov-2018 02:47:31 Asia/Kolkata] PHP Notice:  Undefined index: page in F:\STUDIES\DBMS\Project\WebApp\Includes\header.php on line 9
