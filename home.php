@@ -16,5 +16,7 @@
         include_once("Includes/user.php");
     }
 
+    include_once("Includes/footer.php");
+
 ?>
 

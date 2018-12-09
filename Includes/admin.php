@@ -205,6 +205,4 @@
 
 <script src="/JS/admin.js"></script>
         
-<?php
-    include_once("footer.php");
-?>
+

@@ -38,7 +38,7 @@
 
     $q = "CREATE TABLE IF NOT EXISTS user_roles (";
     $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
-    $q .= "role VARCHAR(10) NOT NULL)";
+    $q .= "role VARCHAR(17) NOT NULL)";
     
     $conn->query($q) or die("Create 'user_roles' Table failed. Contact admins. Error: " . $conn->error);
 
@@ -168,9 +168,9 @@
     $conn->query($q) or die("Doctor creation failed (1.2). Contact admins. Error: " . $conn->error);
 
     $q = "INSERT INTO user_roles (id, role) ";
-    $q .= "SELECT * FROM (SELECT 3, 'Nurse') AS tmp ";
+    $q .= "SELECT * FROM (SELECT 3, 'Nurse/Pharmacist') AS tmp ";
     $q .= "WHERE NOT EXISTS (";
-    $q .= "SELECT role FROM user_roles WHERE role = 'Nurse'";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Nurse/Pharmacist'";
     $q .= ") LIMIT 1";
    
     $conn->query($q) or die("Nurse creation failed (1.3). Contact admins. Error: " . $conn->error);

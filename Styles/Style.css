@@ -371,3 +371,55 @@ div#user-med-to-take h4, div#user-mr-history h4
 {
     margin: 20px 5px 5px 5px;
 }
+
+
+/**********************************
+*              PHARMACY           *
+***********************************/
+
+div.pharm-functions
+{
+    width: max-content;
+    width: -moz-max-content;
+    width: -webkit-max-content;
+}
+
+div.pharm-functions div.function
+{
+    padding: 5px;
+}
+
+div.pharm-functions h3.admin-function-close
+{
+    margin-left: 5px;
+}
+
+div.pharm-functions table
+{
+    border-collapse: collapse;
+    border: solid 2px #202124;
+}
+
+div.pharm-functions table thead tr th
+{
+    background: #202124;
+    color: #fff;
+}
+
+div.pharm-functions table thead tr th, div.pharm-functions table tbody tr td
+{
+    border-left: solid 2px #202124;
+}
+    div.pharm-functions table thead tr th:first-child, div.pharm-functions table tbody tr td:first-child
+    {
+        border: 0;
+    }
+div.pharm-functions table th, div.pharm-functions table td
+{
+    padding: 5px;
+}
+
+div.pharm-functions table tbody tr:nth-child(even)
+{
+    background: rgba(32, 33, 36, 0.30);
+}
