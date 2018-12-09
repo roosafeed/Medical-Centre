@@ -50,8 +50,8 @@ function fillJSON(dataType, result_cont){
             data: sendData,
             url: pharm_url
         }).done(function (data, status, xhr) {
-            //alert(JSON.stringify(data));////////////   
-            if (data == "") {
+            //ToDo: handle db query error 
+            if (data == "" || data == "[]") {
                 modalShow("Empty. No data to be fetched.");
             }
             else if (data == "Unauthorized") {

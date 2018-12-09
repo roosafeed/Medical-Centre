@@ -7,6 +7,12 @@
     */
     $GLOBALS["page"] = "Pharmacy";
     include_once("Includes/header.php");
+    if(!(isAdmin() || isHCstaff()))
+    {
+        header("Location: home.php");
+    }
+
+    include_once("Includes/reminder.php");
 ?>
 <h1>Pharmacy</h1>
 

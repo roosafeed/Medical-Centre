@@ -5,6 +5,8 @@
     {
         header("Location: /home.php");
     }
+
+    include_once("reminder.php");
     
 ?>
 

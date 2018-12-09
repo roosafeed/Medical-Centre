@@ -96,7 +96,7 @@
                 //All stocks that expire in 3 months (90 days)
                 //name, man, arr, exp
                 $q = "SELECT M.name, M.manufacturer AS man, MB.arr_date AS arr, MB.exp_date AS exp, DATEDIFF(MB.exp_date, CURDATE()) AS dif ";
-                $q .= "FROM medicines M INNER JOIN med_batch MB ON M.id = MB.med_id WHERE DATEDIFF(MB.exp_date, CURDATE()) < 701 AND ";
+                $q .= "FROM medicines M INNER JOIN med_batch MB ON M.id = MB.med_id WHERE DATEDIFF(MB.exp_date, CURDATE()) < 91 AND ";
                 $q .= "DATEDIFF(MB.exp_date, CURDATE()) > 0 ORDER BY DATEDIFF(MB.exp_date, CURDATE()) ASC";
                 $q = $conn->query($q) or die("Error: " . $conn->error);
                 while($row = $q->fetch_assoc())

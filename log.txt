@@ -1,2 +1,3 @@
 [08-Dec-2018 09:56:43 Asia/Kolkata] PHP Fatal error:  Call to a member function fetch_assoc() on a non-object in F:\STUDIES\DBMS\Project\WebApp\pharm_handle.php on line 77
 [08-Dec-2018 09:57:22 Asia/Kolkata] PHP Fatal error:  Class 'medicine' not found in F:\STUDIES\DBMS\Project\WebApp\pharm_handle.php on line 79
+[09-Dec-2018 20:06:48 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in F:\STUDIES\DBMS\Project\WebApp\Includes\reminder.php on line 21

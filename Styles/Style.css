@@ -423,3 +423,25 @@ div.pharm-functions table tbody tr:nth-child(even)
 {
     background: rgba(32, 33, 36, 0.30);
 }
+
+/**********************************
+*              REMINDER           *
+***********************************/
+
+a#link-reminder
+{
+    text-decoration: none;
+}
+
+div#cont-reminder
+{
+    border: solid 1px rgba(32, 33, 36, 0.30);
+    border-radius: 5px;
+    width: max-content;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    margin: 15px auto;
+    padding: 0 5px;
+    background: rgba(255, 0, 0, 0.30);
+    box-shadow: 0 3px 6px rgba(77, 79, 87, 0.30);
+}
