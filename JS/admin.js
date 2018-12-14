@@ -235,7 +235,10 @@ function addMed() {
     $(".med-time").button();
 
     $("#mr-med" + (len + 1)).autocomplete({
-        source: "/med_search.php",
+        source: function (request, response) {
+            $.getJSON("/med_search.php", { term: request.term, type: 'stock-med' },
+              response);
+        },
         minLength: 3
     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
       return $( "<li>" )

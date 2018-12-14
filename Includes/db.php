@@ -107,11 +107,14 @@
 
     $q = "CREATE TABLE IF NOT EXISTS med_batch (";
     $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
-    $q .= "mfg_date DATE NOT NULL,";
     $q .= "exp_date DATE NOT NULL,";
     $q .= "arr_date DATE NOT NULL,";                //date on which the stock arrived at the HC
+    $q .= "entry DATETIME NOT NULL,";               //Time when data was entered
     $q .= "stock_num INT NOT NULL,";
+    $q .= "init_stock INT NOT NULL,";
+    $q .= "price INT NOT NULL,";                    //Total cost of the batch
     $q .= "med_id INT NOT NULL,";
+    $q .= "seller VARCHAR(50),";
     $q .= "FOREIGN KEY (med_id) REFERENCES medicines (id) ON DELETE CASCADE)";
 
     $conn->query($q) or die("Create 'med_batch' Table failed. Contact admins. Error: " . $conn->error);

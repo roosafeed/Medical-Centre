@@ -249,6 +249,17 @@ input[type=submit]
         color: #fff;
     }
 
+input[type=button]
+{
+    color: #202124;
+    background: #fff;
+}
+    input[type=button]:hover
+    {
+        color: #fff;
+        background: #202124;
+    }
+
 .admin-function-close, .profile-function-close
 {
     border: 2px solid #202124;
@@ -406,6 +417,11 @@ div.pharm-functions table thead tr th
     color: #fff;
 }
 
+div.pharm-functions table tfoot tr
+{
+    border-top: solid 2px #202124;
+}
+
 div.pharm-functions table thead tr th, div.pharm-functions table tbody tr td
 {
     border-left: solid 2px #202124;
@@ -424,14 +440,14 @@ div.pharm-functions table tbody tr:nth-child(even)
     background: rgba(32, 33, 36, 0.30);
 }
 
+div.pharm-functions table tfoot td
+{
+    text-align: center;
+}
+
 /**********************************
 *              REMINDER           *
 ***********************************/
-
-a#link-reminder
-{
-    text-decoration: none;
-}
 
 div#cont-reminder
 {
@@ -444,4 +460,5 @@ div#cont-reminder
     padding: 0 5px;
     background: rgba(255, 0, 0, 0.30);
     box-shadow: 0 3px 6px rgba(77, 79, 87, 0.30);
+    cursor: pointer;
 }

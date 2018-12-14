@@ -14,9 +14,15 @@
 <?php
     if(intval($row["c"]) > 0)
     {
-        echo '<a href="/pharmacy.php#list-exp" id="link-reminder">';
+        //echo '<a href="/pharmacy.php#list-exp" id="link-reminder">';
         echo '<div id="cont-reminder">';
         echo '<h4>Number of batches that expire in 90 days: ' . $row["c"] . '</h4>';
-        echo '</div></a>';
+        echo '</div>';
     }    
 ?>
+
+<script>
+    $("div#cont-reminder").click(function () {
+        window.location = "/pharmacy.php#list-exp";
+    });
+</script>

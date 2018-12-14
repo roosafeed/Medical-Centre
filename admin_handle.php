@@ -202,14 +202,11 @@
         //Add medicine stock
         $med_id = trim($_POST["stock-med-id"]);
         $med_name = trim($_POST["stock-name"]);
-        $mfg = $_POST["stock-mfg"];
+        $price = $_POST["stock-cost"];
         $exp = $_POST["stock-exp"];
         $arr = $_POST["stock-arr"];
         $num = $_POST["stock-num"];
-
-        $name = explode("(", $med_name);
-        $name = explode(":", $name[0]);
-        $med_name = trim($name[1]);
+        $seller = $_POST["stock-seller"];
 
         $mchck = "SELECT id FROM medicines WHERE id = ? AND LOWER(name) = LOWER(?)";
         $mchck = $conn->prepare($mchck);
@@ -221,9 +218,9 @@
 
         if($nr == 1)
         {
-            $qm = "INSERT INTO med_batch (mfg_date, exp_date, arr_date, stock_num, med_id) VALUES (?, ?, ?, ?, ?)";
+            $qm = "INSERT INTO med_batch (price, exp_date, arr_date, stock_num, init_stock, seller, med_id, entry) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
             $qm = $conn->prepare($qm) or die($conn->error);
-            $qm->bind_param("sssdd", $mfg, $exp, $arr, $num, $med_id) or die($qm->error);
+            $qm->bind_param("dssddsd", $price, $exp, $arr, $num, $num, $seller, $med_id) or die($qm->error);
             $qm->execute() or die($qm->error);
             $qm->store_result() or die($qm->error);
             $ar = $qm->affected_rows;

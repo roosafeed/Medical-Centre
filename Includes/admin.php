@@ -114,13 +114,15 @@
             <h3>Add Medicine Stock</h3>
             <input type="text" name="stock-name" id="stock-name" placeholder="Medicine Name" title="Medicine Name" /> <br />
             <input type="hidden" name="stock-med-id" id="stock-med-id" value="" /> <br />
-            <label for="stock-mfg">Date of Manufacture:</label> <br />
-            <input type="date" name="stock-mfg" id="stock-mfg" title="Date of Manufacture" /> <br />
             <label for="stock-mfg">Date of Expiry:</label> <br />
             <input type="date" name="stock-exp" id="stock-exp" title="Date of Expiry" /> <br />
             <label for="stock-mfg">Date of Arrival:</label> <br />
             <input type="date" name="stock-arr" id="stock-arr" title="Date of Arrival" /> <br /> 
             <input type="number" name="stock-num" id="stock-num" placeholder="Number of meds" title="Number of meds" /> <br />
+            <label for="stock-seller">Seller:</label> <br />
+            <input type="text" name="stock-seller" id="stock-seller" placeholder="Medicine seller" title="Medicine stock seller" /> <br />
+            <label for="stock-cost">Total Price (INR):</label> <br />
+            <input type="number" name="stock-cost" id="stock-cost" placeholder="Total price of the stock" title="Total Cost of the stock" /> <br />
 
             <input type="submit" name="stock-add" value="Add Stock" />
             <input type="reset" value="Reset" /> <br />
