@@ -69,8 +69,9 @@
             {
                 //List all medicines
                 //name, man
-                $q = "SELECT M.name, M.manufacturer AS man, COUNT(MB.id) AS bnum FROM medicines M INNER JOIN med_batch MB ON M.id = MB.med_id ";
-                $q .= "WHERE DATEDIFF(MB.exp_date, CURDATE()) > 0 GROUP BY M.id";
+                $q = "SELECT M.name, M.manufacturer AS man, IFNULL(COUNT(MB.id), 0) AS bnum FROM medicines M LEFT JOIN ";
+                $q .= "(SELECT med_id, exp_date, id FROM med_batch WHERE DATEDIFF(exp_date, CURDATE()) > 0) MB ON M.id = MB.med_id ";
+                $q .= "GROUP BY M.id";
                 $q = $conn->query($q) or die("Error: " . $conn->error);
                 while($row = $q->fetch_assoc())
                 {
@@ -138,14 +139,20 @@
         elseif(isset($_POST["stock-mod-num"]))
         {
             //Reduce stock-mod-num from the stock
+            //Update: add to med_transaction
             $num = trim($_POST["stock-mod-num"]);
             $id = $_POST["stock-mod-id"];
             $q = "UPDATE med_batch SET stock_num = (stock_num - ?) WHERE id = ?";
+            $q2 = "INSERT INTO med_transaction (batch_id, num, tr_date) VALUES (?, ?, NOW())";
+            $q2 = $conn->prepare($q2) or die($conn->error);
             $q = $conn->prepare($q) or die($conn->error);
             $q->bind_param("dd", $num, $id);
+            $q2->bind_param("dd", $id, $num);
             $q->execute() or die($q->error);
             $q->store_result();
-            if($q->affected_rows == 1)
+            $q2->execute() or die($q2->error);
+            $q2->store_result();
+            if($q->affected_rows == 1 && $q2->affected_rows == 1)
             {
                 echo "200"; 
             }
@@ -153,6 +160,7 @@
             {
                 echo "error";
             }
+            $q2->close();
             $q->close();
         }
 

@@ -9,29 +9,25 @@
     include_once("reminder.php");
     
 ?>
+<!--Certain functions are disabled-->
 
 <div id="admin-buttons">
     <div class="button" id="toggle-create-user">
         <h2>Create User</h2>
     </div>
+    <div class="button" id="toggle-reset-user-pass">
+        <h2>Reset User Password</h2>
+    </div>
+    <!-- These are currently unused, but works as intended
     <div class="button" id="toggle-add-mr">
         <h2>Add Medical Record</h2>
     </div>
     <div class="button" id="toggle-del-last-record">
         <h2>Delete Last Record</h2>
-    </div>
-    <div class="button" id="toggle-add-med-stock">
-        <h2>Add Medicine Stock</h2>
-    </div>
-    <div class="button" id="toggle-add-med">
-        <h2>Add New Medicine</h2>
-    </div>
+    </div>    
     <div class="button" id="toggle-get-user-history">
         <h2>Get User History</h2>
-    </div>
-    <div class="button" id="toggle-reset-user-pass">
-        <h2>Reset User Password</h2>
-    </div>
+    </div>    
     <div class="button" id="toggle-add-relation">
         <h2>Add New Relation</h2>
     </div>
@@ -40,6 +36,13 @@
     </div>
     <div class="button" id="toggle-get-user-details">
         <h2>Get User Details</h2>
+    </div>
+    -->
+    <div class="button" id="toggle-add-med-stock">
+        <h2>Add Medicine Stock</h2>
+    </div>
+    <div class="button" id="toggle-add-med">
+        <h2>Add New Medicine</h2>
     </div>
     
 </div>
@@ -80,6 +83,9 @@
         </form>
     </div>
 
+    <?php
+        //Comment unused html codes in php
+    /*
     <div class="function" id="add-mr">
         <form id="add-mr-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
@@ -107,7 +113,8 @@
             <input type="reset" value="Reset" />
         </form>
     </div>
-
+    */
+    ?>
     <div class="function" id="add-med-stock">
         <form id="add-med-stock-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
@@ -128,7 +135,7 @@
             <input type="reset" value="Reset" /> <br />
         </form>
     </div>
-
+    
     <div class="function" id="add-med">
         <form id="add-med-form" action="" method="post">
             <h3 class="admin-function-close">X</h3>
@@ -151,6 +158,8 @@
         </form>
     </div>
 
+    <?php
+        /*
     <div class="function" id="get-user-history">
         <form id="get-user-history-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
@@ -205,6 +214,8 @@
             <input type="reset" value="Reset" />
          </form>
     </div>
+    */
+    ?>
 </div>
 
 <script src="/JS/admin.js"></script>

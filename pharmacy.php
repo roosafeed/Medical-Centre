@@ -28,6 +28,10 @@
     <div class="button" id="toggle-list-exp">
         <h2>Expiring</h2>
     </div>
+
+    <div class="button" id="toggle-report">
+        <h2>Report</h2>
+    </div>
 </div>
 
 <div class="pharm-functions">
@@ -106,6 +110,15 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="function" id="report">
+        <h3 class="admin-function-close">X</h3>
+        <h3>Report</h3>
+        <p>Generate a report for the current month. <br />(From <?php echo date("01-F-Y") . " to " . date("d-F-Y"); ?>)</p>
+        <a href="/month_report.php" target="_blank">
+            <input type="button" value="Generate" />
+        </a>
     </div>
 </div>
 

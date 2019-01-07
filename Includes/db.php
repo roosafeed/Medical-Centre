@@ -3,6 +3,7 @@
     //---------------------------
 
     //Table: users
+    //CT01
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS users (";
@@ -20,9 +21,10 @@
     $q .= "dob DATE,";
     $q .= "gender VARCHAR(7))";
 
-    $conn->query($q) or die("Create 'users' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT01. Contact admins.");
 
     //Table: contacts
+    //CT02
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS contacts (";
@@ -31,27 +33,30 @@
     $q .= "lname VARCHAR(35),";
     $q .= "mob VARCHAR(10))";
 
-    $conn->query($q) or die("Create 'contacts' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT02. Contact admins.");
 
     //Table: user_roles
+    //CT03
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS user_roles (";
     $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
     $q .= "role VARCHAR(17) NOT NULL)";
     
-    $conn->query($q) or die("Create 'user_roles' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT03. Contact admins.");
 
     //Table: relations
+    //CT04
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS relations (";
     $q .= "id INT PRIMARY KEY AUTO_INCREMENT,";
     $q .= "relation VARCHAR(20) NOT NULL)";
     
-    $conn->query($q) or die("Create 'relations' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT04. Contact admins.");
 
     //Table: users_in_roles
+    //CT05
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS users_in_roles (";
@@ -61,9 +66,10 @@
     $q .= "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,";
     $q .= "FOREIGN KEY (role_id) REFERENCES user_roles (id) ON DELETE CASCADE)";
 
-    $conn->query($q) or die("Create 'users_in_roles' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT05. Contact admins.");
 
     //Table: users_in_relation
+    //CT06
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS users_in_relation (";
@@ -75,9 +81,10 @@
     $q .= "FOREIGN KEY (contact_id) REFERENCES contacts (id) ON DELETE CASCADE,";
     $q .= "FOREIGN KEY (relation_id) REFERENCES relations (id) ON DELETE CASCADE)";
 
-    $conn->query($q) or die("Create 'users_in_relation' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT06. Contact admins.");
 
     //Table: medical_records
+    //CT07
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS medical_records (";
@@ -89,9 +96,10 @@
     $q .= "FOREIGN KEY (doc_id) REFERENCES users (id) ON DELETE CASCADE,";
     $q .= "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)";
     
-    $conn->query($q) or die("Create 'medical_records' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT07. Contact admins.");
 
     //Table: medicines
+    //CT08
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS medicines (";
@@ -100,9 +108,10 @@
     $q .= "manufacturer VARCHAR(30),";
     $q .= "UNIQUE(name))";
 
-    $conn->query($q) or die("Create 'medicines' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT08. Contact admins.");
 
     //Table: med_batch
+    //CT09
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS med_batch (";
@@ -117,9 +126,10 @@
     $q .= "seller VARCHAR(50),";
     $q .= "FOREIGN KEY (med_id) REFERENCES medicines (id) ON DELETE CASCADE)";
 
-    $conn->query($q) or die("Create 'med_batch' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT09. Contact admins.");
 
     //Table: prescriptions
+    //CT10
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS prescriptions (";
@@ -134,9 +144,10 @@
     $q .= "FOREIGN KEY (mr_id) REFERENCES medical_records (id) ON DELETE CASCADE,";
     $q .= "FOREIGN KEY (mb_id) REFERENCES med_batch (id) ON DELETE CASCADE)";
 
-    $conn->query($q) or die("Create 'prescriptions' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT10. Contact admins.");
 
     //Table: med_certificate
+    //CT11
     //---------------------------
 
     $q = "CREATE TABLE IF NOT EXISTS med_certificate (";
@@ -148,7 +159,20 @@
     $q .= "rec_ref VARCHAR(20),";                           //Receipt reference number
     $q .= "FOREIGN KEY (mr_id) REFERENCES medical_records (id) ON DELETE CASCADE)";
 
-    $conn->query($q) or die(" Create 'med_certificate' Table failed. Contact admins. Error: " . $conn->error);
+    $conn->query($q) or die("Error CT11. Contact admins.");
+
+    //Table: med_transaction
+    //CT12
+    //----------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS med_transaction (";
+    $q .= "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "batch_id INT NOT NULL,";
+    $q .= "num SMALLINT UNSIGNED NOT NULL,";
+    $q .= "tr_date DATETIME NOT NULL,";
+    $q .= "FOREIGN KEY (batch_id) REFERENCES med_batch (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Error CT12. Contact admins. " . $conn->error);
 
 
     //Insert some required data
