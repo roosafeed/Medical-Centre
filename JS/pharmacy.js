@@ -2,41 +2,27 @@
 //Last sync times
 var sync_med = 0,
     sync_stock = 0,
-    sync_exp = 0;
+    sync_exp = 0,
+    sync_trans = 0;
 
-var sync_wait = 600;    //seconds (10 minutes)
+var sync_wait = 600,    //seconds (10 minutes)
+    sync_auto_trans = 10;
 
 //Request address
 var pharm_url = "/pharm_handle.php";
 var stockObj = "[]",
+    transObj = "[]",
     stock_min_id = 0,
     stock_max_id = 0,
-    stock_sum_worth = 0;
+    stock_sum_worth = 0,
+    trans_min_id = 0,
+    trans_max_id = 0;
 
-function reJSON(data)
-{
-        $("#loading").show();
-        $.ajax({
-            method: 'POST',
-            data: data,
-            url: pharm_url,
-            dataType: 'JSON',
-            async: false
-        }).always(function () {
-            $("#loading").hide();
-        }).done(function (data, status, xhr) {
-            alert(JSON.stringify(data));////////////
-            return JSON.stringify(data);
-        }).fail(function (xhr, status, errotThrown) {
-            modalShow("Error: " + status + "\n" + errorThrown);
-            return false;
-        });
-}
+var trans_Interval_var; //setInterval variable
 
 function fillJSON(dataType, result_cont){
     //dataType - Data to be retrieved (med/stock/exp)
     //result_cont - Container ID for the result to be loaded in
-    //ToDo  : Pagination to handle large data
     var ret;
     var sendData = "type=" + dataType,
         output = "",
@@ -47,7 +33,6 @@ function fillJSON(dataType, result_cont){
     ((Math.floor(new Date().getTime() / 1000) - sync_exp > sync_wait) && dataType == "exp") ||
     ((Math.floor(new Date().getTime() / 1000) - sync_stock > sync_wait) && dataType == "stock"))
     {
-
         $("#loading").show();
         $.ajax({
             method: 'POST',
@@ -102,16 +87,27 @@ $(function () {
     //Check to see if the location contains a hash
     //Call the respective function
     var hash = window.location.hash.substr(1);
-    if(hash != "" && hash != "home")
-    {
+    if (hash != "" && hash != "home") {
         $(".pharm-functions #" + hash).show(800);
         pos = $(".pharm-functions #" + hash).offset().top;
         $("HTML, BODY").animate({ scrollTop: pos }, 1000);
-        fillJSON(hash.replace("list-", ""), hash);
-    }    
+        if (hash == "list-trans") {
+            trans_Interval_var = setInterval(function () {
+                loadRecords();
+            }, sync_auto_trans * 1000);
+            loadRecords();
+        }
+        else {
+            fillJSON(hash.replace("list-", ""), hash);
+        }
+        
+    }
 });
 
 $(".button").click(function () {
+    //clear the setInterval on loadRecords() if it is set on page load
+    clearInterval(trans_Interval_var);
+
     var bId = String(this.id),
         divClass = bId.replace("toggle-", ""),
         pos = 0,
@@ -123,7 +119,17 @@ $(".button").click(function () {
     pos = $(".pharm-functions #" + divClass).offset().top;
     $("HTML, BODY").animate({ scrollTop: pos }, 1000);
     window.location.hash = divClass;
-    fillJSON(data, divClass);
+    if (divClass == "list-trans") {
+        trans_Interval_var = setInterval(function () {
+            //$("div#cont-list-trans p#trans-status").text("Refreshing...");
+            loadRecords();
+        }, sync_auto_trans * 1000);
+        loadRecords();
+    }
+    else {
+        fillJSON(data, divClass);
+    }
+
 });
 
 $(".admin-function-close").click(function () {
@@ -183,6 +189,7 @@ $("#stock-search-name").autocomplete({
     .append("<div>" + item.value + "<br>" + item.desc + "</div></li>")
     .appendTo(ul);
 };
+
 
 //stock seach form handler
 $("#stock-search-form").submit(function (e) {
@@ -370,3 +377,108 @@ function populate_med(retObj){
     }
     return output
 }
+
+function trans_auto_sync(data)
+{
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: pharm_url,
+        dataType: 'JSON'
+    }).always(function () {
+    }).done(function (data, status, xhr) {
+        if (data == "" || data == "[]") {
+            //modalShow("Empty. No data to be fetched.");
+        }
+        else if (data == "Unauthorized") {
+            modalShow("Error: Unauthorized access.");
+        }
+        else {
+            var retObj = JSON.parse(data);  //returned object
+            //Populate the trans table with data.
+        }
+
+    }).fail(function (xhr, status, errotThrown) {
+        modalShow("Error: " + status + "\n" + errorThrown);
+        return false;
+    });
+}
+
+//Clear the setInterval on loadRecords()
+$("#list-trans-close").click(function () {
+    clearInterval(trans_Interval_var);
+});
+
+function loadRecords(more)
+{
+    //more -> TRUE/FALSE
+    //        TRUE if function was invoked by 'Load Older Data' button
+    //        Default is false - optional
+    more = more || false;   //ES5 for older browser & IE support
+      
+    
+    if (!more) {
+        //$("div#cont-list-trans p#trans-status").text("Refreshing...");
+        var sendData = "record=trans&max=" + trans_max_id;
+    }
+    else {
+        $("input").attr("disabled", "disabled");
+        $("div#cont-list-trans p#trans-status").text("Loading...");
+        var sendData = "record=trans&min=" + trans_min_id;
+    }
+    
+    var output = "";
+
+    $.ajax({
+        method: 'POST',
+        data: sendData,
+        url: pharm_url
+    }).done(function (data, status, xhr) {
+        if (data == "" || data == "[]") {
+            //modalShow("No data");
+        }
+        else {
+            var transObj = JSON.parse(data);
+            trans_min_id = transObj[0].id;
+            for (var x in transObj) {
+                output += '<li><div class="trans">';
+                output += '<div class="med">' + transObj[x].medname + ' (' + transObj[x].man + ')</div>';
+                output += '<div class="num">' + transObj[x].num + '</div>';
+                output += '<div class="date">' + transObj[x].date + '</div>';
+                output += '<div class="vendor">' + transObj[x].vendor + ' (' + transObj[x].vid + ')' + '</div>';
+                output += '<div class="more">';
+                output += (transObj[x].more == "POS") ? "POS to " + transObj[x].buyer + " (" + transObj[x].bid + ")" : "Modified";
+                output += '</div>';
+                output += '</div></li>';
+
+                if (Number(transObj[x].id) < trans_min_id) {
+                    trans_min_id = Number(transObj[x].id);
+                }
+                if (Number(transObj[x].id) > trans_max_id) {
+                    trans_max_id = Number(transObj[x].id);
+                }
+            }
+
+            if (!more) {
+                $("div#cont-list-trans ul").prepend(output);
+            }
+            else {
+                $("div#cont-list-trans ul").append(output);
+                $("input").removeAttr("disabled");
+            }
+
+        }
+        $("div#cont-list-trans p#trans-status").text(" ");
+        $("input").removeAttr("disabled");
+    }).fail(function (xhr, status, errorThrown) {
+        $("div#cont-list-trans p#trans-status").text("Error. " + errorThrown);
+        $("input").removeAttr("disabled");
+    })
+}
+
+//Load Older Data 
+//Load transactions below the trans_min_id
+$("#trans-more").click(function () {
+    //clearInterval(trans_Interval_var);
+    loadRecords(true);
+});

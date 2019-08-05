@@ -1,4 +1,9 @@
 $(".button").click(function () {
+    /*
+    *Handles the admin function button clicks
+    *Opens the respective function form and scrolls to it if neccessary
+    *Closes other forms if open
+    */
     var bId = String(this.id),
         divClass = bId.replace("toggle-", ""),
         pos = 0,
@@ -63,6 +68,7 @@ $("#add-relation #role-name").on('change', function () {
 });
 
 
+//autocompletes
 $(function () {
     $("#stock-name").autocomplete({
         source: function (request, response) {
@@ -150,6 +156,8 @@ $(function () {
 
 });
 
+
+//add extra fields for medicines
 function addMed() {
     var container = document.getElementById("mr-meds");    
     var len = container.getElementsByTagName("input").length;

@@ -473,4 +473,85 @@
             echo '</ul></div>';          //#cont-result            
         }
     }
+
+    elseif(isset($_POST["pos-user-id"]))
+    {
+        //Handle the POS requests
+        //Insert into pos table
+        //insert all meds into med_transaction table
+        //use the insert id of all the transaction and save it along with pos id into pos_transaction table
+        $buy_id = $_POST["pos-user-id"];
+        $vendor_id = $_SESSION["userid"];
+
+        //insert into pos (vendor_id, buyer_id, pos_date)
+        $posq = "INSERT INTO pos (vendor_id, buyer_id, pos_date) VALUES (?, ?, NOW())";
+        $posq = $conn->prepare($posq);
+        $posq->bind_param("dd", $vendor_id, $buy_id);
+        $posq->execute();
+        //$posq->store_result();
+        $ar = $posq->affected_rows;
+        $posid = $posq->insert_id;
+        $posq->close();
+        
+        if($ar == 1)
+        {
+            //med_transaction (batch_id, num, tr_date)
+            //no checks are made!!!
+            $batchid = 0;
+            $med_num = 0;
+            $medq = "INSERT INTO med_transaction (batch_id, num, tr_date) VALUES (?, ?, NOW())";
+            $medq = $conn->prepare($medq);
+            $medq->bind_param("dd", $batchid, $med_num);
+            $medids[] = array();
+            $c = 0;
+            while(isset($_POST["med-id-" . $c]))
+            {
+                $batchid = $_POST["med-id-" . $c];
+                $med_num = $_POST["med-num-" . $c];
+                $medq->execute();
+                if($medq->affected_rows == 1)
+                {
+                    $medids[] = $medq->insert_id;
+                }
+                else
+                {
+                    echo "Error inserting medicine #" . $c;
+                }
+
+                $c = $c + 1;
+            }
+            $medq->close();
+            
+            //pos_transaction (pos_id, trans_id)
+            $trans_id = 0;
+            $pmedq = "INSERT INTO pos_transaction (pos_id, trans_id) VALUES (?, ?)";
+            $pmedq = $conn->prepare($pmedq);
+            $pmedq->bind_param("dd", $posid, $trans_id);
+            while($c != 0)
+            {
+                //echo $medids[$c] . " , ";
+                $trans_id = $medids[$c];
+                $pmedq->execute();
+                if($pmedq->affected_rows != 1)
+                {
+                    echo "Error creating a POS transaction Med#" . ($c);
+                }
+                $c = $c - 1;
+            }
+            $pmedq->close();
+
+            echo "Done.";
+            
+        } 
+        else
+        {
+            echo "Something went wrong";
+        }        
+        
+    }
+
+    else
+    {
+        echo "Error: Request type unhandled.";
+    }
 ?>

@@ -158,7 +158,7 @@
     $q .= "duration TINYINT NOT NULL,";
     $q .= "rec_ref VARCHAR(20),";                           //Receipt reference number
     $q .= "FOREIGN KEY (mr_id) REFERENCES medical_records (id) ON DELETE CASCADE)";
-
+    
     $conn->query($q) or die("Error CT11. Contact admins.");
 
     //Table: med_transaction
@@ -169,11 +169,51 @@
     $q .= "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,";
     $q .= "batch_id INT NOT NULL,";
     $q .= "num SMALLINT UNSIGNED NOT NULL,";
-    $q .= "tr_date DATETIME NOT NULL,";
+    $q .= "tr_date DATETIME,";
     $q .= "FOREIGN KEY (batch_id) REFERENCES med_batch (id) ON DELETE CASCADE)";
 
     $conn->query($q) or die("Error CT12. Contact admins. " . $conn->error);
 
+    //Table: pos
+    //CT13
+    //--------------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS pos (";
+    $q .= "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "vendor_id INT NOT NULL,";
+    $q .= "buyer_id INT NOT NULL,";
+    $q .= "pos_date DATETIME NOT NULL,";
+    $q .= "FOREIGN KEY (vendor_id) REFERENCES users (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (buyer_id) REFERENCES users (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Error CT13. Contact admins. " . $conn->error);
+
+    //Table: pos_transaction
+    //CT14
+    //--------------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS pos_transaction (";
+    $q .= "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "pos_id INT UNSIGNED NOT NULL,";
+    $q .= "trans_id INT UNSIGNED NOT NULL,";
+    $q .= "FOREIGN KEY (trans_id) REFERENCES med_transaction (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (pos_id) REFERENCES pos (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Error CT14. Contact admins. " . $conn->error);
+
+    //Table: med_vendor
+    //CT15
+    //--------------------------------
+
+    $q = "CREATE TABLE IF NOT EXISTS med_vendor (";
+    $q .= "id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,";
+    $q .= "mt_id INT UNSIGNED NOT NULL,";
+    $q .= "vid INT NOT NULL,";
+    $q .= "mt_date DATETIME NOT NULL,";
+    $q .= "FOREIGN KEY (mt_id) REFERENCES med_transaction (id) ON DELETE CASCADE,";
+    $q .= "FOREIGN KEY (vid) REFERENCES users (id) ON DELETE CASCADE)";
+
+    $conn->query($q) or die("Error CT15. Contact admins. " . $conn->error);
 
     //Insert some required data
     //============================
@@ -228,7 +268,7 @@
     $statement_check_admin_exists->store_result();
     if($statement_check_admin_exists->num_rows == 0)
     {
-        $query_insert_admin = "INSERT INTO users (fname, email, password) VALUES ('Admin', ?, SHA(?))";
+        $query_insert_admin = "INSERT INTO users (fname, email, idnum, password) VALUES ('Admin', ?, 'admin001', SHA(?))";
         $statement_insert_admin = $conn->prepare($query_insert_admin);
         $statement_insert_admin->bind_param('ss', $default_admin_email, $default_admin_password);
         $statement_insert_admin->execute();

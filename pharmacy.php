@@ -29,6 +29,10 @@
         <h2>Expiring</h2>
     </div>
 
+    <div class="button" id="toggle-list-trans">
+        <h2>Records</h2>
+    </div>
+
     <div class="button" id="toggle-report">
         <h2>Report</h2>
     </div>
@@ -51,6 +55,20 @@
             </table>
         </div>
     </div>
+
+    <div class="function" id="list-trans">
+        <h3 class="admin-function-close" id="list-trans-close">X</h3>        
+        <h3>Records</h3>
+        <div id="cont-list-trans">
+            <p id="trans-status"></p>
+            <ul>
+                
+            </ul>
+            <input type="button" id="trans-more" value="Load Older Data" />
+            <p id="trans-status"></p>
+        </div>
+    </div>
+
 
     <div class="function" id="list-stock">
         <form id="stock-search-form" method="post">

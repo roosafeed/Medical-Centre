@@ -21,12 +21,12 @@
 
     $title = "Report for the month of " . date("F Y") . " (upto " . date("d-m-Y") . ")";
 
-    $q = "SELECT M.name, IFNULL((SUM(MB.init_stock) - IFNULL(SUM(MT.num), 0)), 0) AS stock, IFNULL(SUM(WT.w), 0) AS worth FROM medicines M ";
-    $q .= "LEFT JOIN (SELECT * FROM med_batch WHERE DATEDIFF(exp_date, CURDATE()) > 0) MB ON M.id = Mb.med_id ";
-    $q .= "LEFT JOIN med_transaction MT ON MB.id = MT.batch_id LEFT JOIN (SELECT MB.id, ";
-	$q .= "((MB.price / MB.init_stock) * (SUM(MB.init_stock) - IFNULL(SUM(MT.num), 0))) as w FROM med_batch MB LEFT JOIN med_transaction ";
-    $q .= "MT ON MT.batch_id = MB.id GROUP BY MB.id) WT ON WT.id = MB.id WHERE MONTH(IFNULL(MT.tr_date, NOW())) = MONTH(NOW()) ";
-    $q .= "GROUP BY M.id ORDER BY M.name";
+    $q = "SELECT M.name AS name, IFNULL(SUM(MB.init_stock), 0) AS tot, IFNULL((SUM(MB.init_stock) - IFNULL(SUM(M2.s), 0)), 0) AS stock, ";
+    $q .= "SUM(IFNULL(MB.price, 0)) - SUM(IFNULL(M2.w, 0)) AS worth, MB.price FROM medicines M LEFT JOIN (SELECT * FROM med_batch ";
+    $q .= "WHERE DATE(exp_date) >= DATE(NOW())) MB ON M.id = MB.med_id LEFT JOIN ";
+    $q .= "(SELECT MB2.id AS id2, SUM(MT2.num) AS s, price, (MB2.price/MB2.init_stock) * SUM(MT2.num) AS w FROM med_transaction MT2 ";
+    $q .= "INNER JOIN (SELECT * FROM med_batch WHERE DATE(exp_date) >= DATE(NOW())) MB2 ON MB2.id = MT2.batch_id GROUP BY MB2.id) M2 ";
+    $q .= "ON M2.id2 = MB.id GROUP BY M.name ORDER BY M.name";
 
     $q = $conn->query($q) or die("Error CNQ1");
     

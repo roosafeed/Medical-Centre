@@ -23,6 +23,7 @@
 
     function isAdmin()
     {
+        //Returns true if the user is an admin
         if(isloggedin())
         {
             global $conn;
@@ -51,6 +52,7 @@
 
     function isNurse()
     {
+        //Returns true if the user is a Nurse/Pharmacist
         if(isloggedin())
         {
             global $conn;
