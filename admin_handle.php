@@ -18,9 +18,9 @@
         $room = trim($_POST["new-room"]);
         $mob1 = trim($_POST["new-mob1"]);
         $mob2 = trim($_POST["new-mob2"]);
-        $dob = trim($_POST["new-dob"]);
+        $dob = (isset($_POST["new-dob"]))? trim($_POST["new-dob"]): NULL;
         $address = trim($_POST["new-address"]);
-        $gender = trim($_POST["new-gender"]);
+        $gender = (isset($_POST["new-gender"]))? trim($_POST["new-gender"]) : NULL;
         
         $qcheck = "SELECT email FROM users WHERE LOWER(email) = LOWER(?) OR LOWER(idnum) = LOWER(?)";
         $qcheck = $conn->prepare($qcheck);
@@ -414,12 +414,12 @@
     elseif(isset($_POST["det-user-id"]))
     {
         //Get user details
-        $uid = trim($_POST["det-user-id"]);
+        $uid = trim($_POST["det-username"]);
 
         $qudet = "SELECT (YEAR(CURDATE()) - YEAR(U.dob)) AS age, UPPER(U.idnum) AS idn, UPPER(U.residence) AS res, U.*, R.role FROM users U INNER JOIN users_in_roles UR ON UR.user_id = U.id INNER JOIN user_roles R ON R.id = UR.role_id";
-        $qudet .= " WHERE U.id = ?";
+        $qudet .= " WHERE LOWER(U.idnum) = LOWER(?)";
         $qudet = $conn->prepare($qudet);
-        $qudet->bind_param("d", $uid);
+        $qudet->bind_param("s", $uid);
         $qudet->execute();
         $det_res = $qudet->get_result();
         $qudet->close();
@@ -508,6 +508,11 @@
             {
                 $batchid = $_POST["med-id-" . $c];
                 $med_num = $_POST["med-num-" . $c];
+                if(is_null($batchid) || trim($batchid) == "" || $med_num == 0 || is_null($med_num))
+                {
+                    $c = $c + 1;
+                    continue;
+                }
                 $medq->execute();
                 if($medq->affected_rows == 1)
                 {
@@ -534,7 +539,7 @@
                 $pmedq->execute();
                 if($pmedq->affected_rows != 1)
                 {
-                    echo "Error creating a POS transaction Med#" . ($c);
+                    echo "Error creating a POS transaction Med#" . ($c) . " <br />";
                 }
                 $c = $c - 1;
             }

@@ -292,6 +292,9 @@ function mod_formSubmitHandle (e, obj) {
                         stock_sum_worth = Math.round(stock_sum_worth * 100) / 100;
                         $("#stock-worth-sum").text(stock_sum_worth);
                     }
+                    if (data == "Unauthorized") {
+                        modalShow("Error: Unauthorized access.");
+                    }
                 }).fail(function (xhr, status, errorThrown) {
                     //ajax call failed
                     modalShow(errorThrown + "\n" + status);
@@ -447,7 +450,7 @@ function loadRecords(more)
                 output += '<div class="date">' + transObj[x].date + '</div>';
                 output += '<div class="vendor">' + transObj[x].vendor + ' (' + transObj[x].vid + ')' + '</div>';
                 output += '<div class="more">';
-                output += (transObj[x].more == "POS") ? "POS to " + transObj[x].buyer + " (" + transObj[x].bid + ")" : "Modified";
+                output += (transObj[x].more == "POS") ? "POS to " + transObj[x].buyer + " (" + transObj[x].bid + ")" : "Modified in 'ALL Stocks' tab";
                 output += '</div>';
                 output += '</div></li>';
 

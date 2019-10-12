@@ -7,6 +7,11 @@
         header("Location: index.php");
     }
 
+    if(isViewOnly())
+    {
+        header("Location: pharmacy.php");
+    }
+
     if(isAdmin() || isHCstaff())
     {
         include_once("Includes/admin.php");

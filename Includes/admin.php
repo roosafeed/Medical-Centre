@@ -33,11 +33,11 @@
     </div>
     <div class="button" id="toggle-get-contact">
         <h2>Get User Contacts</h2>
-    </div>
+    </div>    
+    -->
     <div class="button" id="toggle-get-user-details">
         <h2>Get User Details</h2>
     </div>
-    -->
     <div class="button" id="toggle-add-med-stock">
         <h2>Add Medicine Stock</h2>
     </div>
@@ -53,6 +53,7 @@
         <form id="create-user-form" name="create-user-form" action="" method="post">
             <h3 class="admin-function-close">X</h3>
             <h3>Create New User</h3>
+            <h5><a href="/user_import.php">Click Here</a> to import users from a spreadsheet</h5><br />
             <select name="new-role" id="new-role">            
             <?php
                 $qroles = "SELECT * FROM user_roles";
@@ -62,8 +63,8 @@
                     echo '<option value="' . $rows["id"] . '">' . $rows["role"] . '</option>';
                 }
                 $roles->close();
-            ?>
-            </select>
+            ?>            
+            </select><br />
             <input type="text" name="new-email" id="new-email" placeholder="Email" title="Email" /> <br />
             <input type="text" name="new-fname" id="new-fname" placeholder="First Name" title="First Name" /> <br />
             <input type="text" name="new-lname" id="new-lname" placeholder="Last Name" title="Last Name" /> <br />
@@ -203,7 +204,8 @@
             <input type="reset" value="Reset" />
          </form>
     </div>
-
+    */
+    ?>
     <div id="get-user-details" class="function">
         <form id="get-user-details-form" method="post" action="">
             <h3 class="admin-function-close">X</h3>
@@ -214,8 +216,8 @@
             <input type="reset" value="Reset" />
          </form>
     </div>
-    */
-    ?>
+    
+    
 </div>
 
 <script src="/JS/admin.js"></script>

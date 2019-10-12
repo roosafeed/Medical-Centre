@@ -14,7 +14,7 @@
         $query .= "DATE_FORMAT(MB.exp_date, '%d-%m-%Y') AS exp, IFNULL(MB.init_stock - MT.dif, MB.init_stock) AS num FROM medicines M ";
         $query .= "INNER JOIN med_batch MB ON M.id = MB.med_id ";
         $query .= "LEFT JOIN (SELECT IFNULL(SUM(num), 0) AS dif, batch_id FROM med_transaction GROUP BY batch_id) MT ON MT.batch_id = MB.id ";
-        $query .= "WHERE M.name LIKE ? AND DATE(CURDATE()) < DATE(MB.exp_date) ORDER BY MB.arr_date ASC LIMIT 6";
+        $query .= "WHERE M.name LIKE ? AND DATE(CURDATE()) < DATE(MB.exp_date) AND IFNULL(MB.init_stock - MT.dif, MB.init_stock) > 0 ORDER BY MB.arr_date ASC LIMIT 6";
     }
 
     $query = $conn->prepare($query);

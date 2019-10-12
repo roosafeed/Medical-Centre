@@ -258,6 +258,14 @@
    
     $conn->query($q) or die("Student creation failed (1.5). Contact admins. Error: " . $conn->error);
 
+    $q = "INSERT INTO user_roles (id, role) ";
+    $q .= "SELECT * FROM (SELECT 6, 'Registrar') AS tmp ";
+    $q .= "WHERE NOT EXISTS (";
+    $q .= "SELECT role FROM user_roles WHERE role = 'Registrar'";
+    $q .= ") LIMIT 1";
+   
+    $conn->query($q) or die("Registrar creation failed (1.6). Contact admins. Error: " . $conn->error);
+
     $default_admin_email = "admin";
     $default_admin_password = "admin";
 

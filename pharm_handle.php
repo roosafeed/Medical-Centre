@@ -47,7 +47,7 @@
         public $num;
     }
 
-    if(!(isAdmin() || isHCstaff()))
+    if(!(isAdmin() || isHCstaff() || isViewOnly()))
     {
         echo "Unauthorized"; //return nothing
     }
@@ -156,46 +156,54 @@
 
         elseif(isset($_POST["stock-mod-num"]))
         {
-            //Reduce stock-mod-num from the stock -> deprecated
-            //Update: add to med_transaction
-            $num = trim($_POST["stock-mod-num"]);
-            $id = $_POST["stock-mod-id"];
-            //$q = "UPDATE med_batch SET stock_num = (stock_num - ?) WHERE id = ?";
-            $q2 = "INSERT INTO med_transaction (batch_id, num, tr_date) VALUES (?, ?, NOW())";
-            $q2 = $conn->prepare($q2) or die($conn->error);
-            //$q = $conn->prepare($q) or die($conn->error);
-            //$q->bind_param("dd", $num, $id);
-            $q2->bind_param("dd", $id, $num);
-            //$q->execute() or die($q->error);
-            //$q->store_result();
-            $q2->execute() or die($q2->error);
-            $q2->store_result();
-            $ar = $q2->affected_rows;
-            $id = $q2->insert_id;
-            $q2->close();
-            if($ar == 1)
+            if(isViewOnly())
             {
-                $q3 = "INSERT INTO med_vendor (mt_id, vid, mt_date) VALUES (?, ?, NOW())";
-                $q3 = $conn->prepare($q3) or die($conn->error);
-                $q3->bind_param("dd", $id, $_SESSION["userid"]);
-                $q3->execute() or die($q3->error);
-                $q3->store_result();
-                if($q3->affected_rows == 1)
+                echo "Unauthorized";
+            }
+            else
+            {
+                //Reduce stock-mod-num from the stock -> deprecated
+                //Update: add to med_transaction
+                $num = trim($_POST["stock-mod-num"]);
+                $id = $_POST["stock-mod-id"];
+                //$q = "UPDATE med_batch SET stock_num = (stock_num - ?) WHERE id = ?";
+                $q2 = "INSERT INTO med_transaction (batch_id, num, tr_date) VALUES (?, ?, NOW())";
+                $q2 = $conn->prepare($q2) or die($conn->error);
+                //$q = $conn->prepare($q) or die($conn->error);
+                //$q->bind_param("dd", $num, $id);
+                $q2->bind_param("dd", $id, $num);
+                //$q->execute() or die($q->error);
+                //$q->store_result();
+                $q2->execute() or die($q2->error);
+                $q2->store_result();
+                $ar = $q2->affected_rows;
+                $id = $q2->insert_id;
+                $q2->close();
+                if($ar == 1)
                 {
-                    echo "200"; 
+                    $q3 = "INSERT INTO med_vendor (mt_id, vid, mt_date) VALUES (?, ?, NOW())";
+                    $q3 = $conn->prepare($q3) or die($conn->error);
+                    $q3->bind_param("dd", $id, $_SESSION["userid"]);
+                    $q3->execute() or die($q3->error);
+                    $q3->store_result();
+                    if($q3->affected_rows == 1)
+                    {
+                        echo "200"; 
+                    }
+                    else
+                    {
+                        echo "error";
+                    }
+                    $q3->close();
                 }
                 else
                 {
                     echo "error";
                 }
-                $q3->close();
-            }
-            else
-            {
-                echo "error";
+            
+                //$q->close();
             }
             
-            //$q->close();
         }
 
         elseif(isset($_POST["stock-search-term"]))
